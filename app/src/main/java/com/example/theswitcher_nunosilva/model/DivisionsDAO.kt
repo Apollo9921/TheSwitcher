@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface DivisionsDAO {
@@ -19,5 +20,8 @@ interface DivisionsDAO {
 
     @Query("SELECT * FROM division_table ORDER BY id ASC")
     fun readAllData(): List<Division>
+
+    @Update
+    suspend fun updateDivisionMode(division: Division)
 
 }

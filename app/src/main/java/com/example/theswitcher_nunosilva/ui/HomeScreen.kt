@@ -18,7 +18,11 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -127,6 +131,7 @@ private fun HomeScreenContent(navController: NavHostController) {
         modifier = Modifier.fillMaxSize()
     ) {
         items(divisionsData.size) { index ->
+            var isOn by remember { mutableStateOf(divisionsData[index].switch) }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -141,8 +146,11 @@ private fun HomeScreenContent(navController: NavHostController) {
                     fontSize = MaterialTheme.typography.titleLarge.fontSize,
                 )
                 Switch(
-                    checked = divisionsData[index].switch,
-                    onCheckedChange = {  },
+                    checked = isOn,
+                    onCheckedChange = {
+                        viewModel?.updateDivisionMode(divisionsData[index].id, it)
+                        isOn = it
+                    },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = MaterialTheme.colorScheme.secondary,
                         checkedTrackColor = MaterialTheme.colorScheme.tertiary,

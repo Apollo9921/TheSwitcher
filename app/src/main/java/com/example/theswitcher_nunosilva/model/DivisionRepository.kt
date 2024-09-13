@@ -14,4 +14,8 @@ class DivisionRepository(private val divisionDAO: DivisionsDAO) {
         return divisionDAO.readAllData()
     }
 
+    suspend fun updateDivisionMode(division: Division) {
+        divisionDAO.updateDivisionMode(division)
+    }
+
 }

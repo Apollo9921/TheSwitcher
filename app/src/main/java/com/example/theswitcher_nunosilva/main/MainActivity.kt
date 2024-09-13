@@ -14,8 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.theswitcher_nunosilva.core.Green
 import com.example.theswitcher_nunosilva.core.TheSwitcher_NunoSilvaTheme
 import com.example.theswitcher_nunosilva.model.DivisionDatabase

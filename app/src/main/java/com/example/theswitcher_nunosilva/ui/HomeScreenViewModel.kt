@@ -64,4 +64,17 @@ class HomeScreenViewModel(
             }
         }
     }
+
+    fun updateDivisionMode(id: Int, mode: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val division = divisionsData.first { it.id == id }
+                division.switch = mode
+                divisionRepository.updateDivisionMode(division)
+                divisionsData[divisionsData.indexOf(division)] = division
+            } catch (e: Exception) {
+                _divisions.value = DivisionsState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
 }

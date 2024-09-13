@@ -8,5 +8,5 @@ data class Division(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
-    val switch: Boolean
+    var switch: Boolean
 )
