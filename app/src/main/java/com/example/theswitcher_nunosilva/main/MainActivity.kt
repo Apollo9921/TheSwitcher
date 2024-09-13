@@ -1,8 +1,8 @@
 package com.example.theswitcher_nunosilva.main
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.theswitcher_nunosilva.core.Green
 import com.example.theswitcher_nunosilva.core.TheSwitcher_NunoSilvaTheme
 import com.example.theswitcher_nunosilva.navigation.NavGraph
 
@@ -24,13 +25,14 @@ class MainActivity : ComponentActivity() {
 
     private var navController: NavHostController? = null
 
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen().setKeepOnScreenCondition {
             keepSplashOpened
         }
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.light(Green.hashCode(), Green.hashCode())
+        )
         setContent {
             TheSwitcher_NunoSilvaTheme {
                 Scaffold(
