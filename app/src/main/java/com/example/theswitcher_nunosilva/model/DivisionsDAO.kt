@@ -9,12 +9,15 @@ import androidx.room.Query
 interface DivisionsDAO {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addAllDivisions(divisions: List<Division>)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addDivision(division: Division)
 
     @Query("DELETE FROM division_table WHERE id = :id")
     suspend fun deleteDivision(id: Int)
 
-    @Query("SELECT * FROM division_table ORDER BY id DESC")
+    @Query("SELECT * FROM division_table ORDER BY id ASC")
     fun readAllData(): List<Division>
 
 }

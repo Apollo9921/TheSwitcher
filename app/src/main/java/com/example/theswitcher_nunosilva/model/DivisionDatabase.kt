@@ -4,6 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.theswitcher_nunosilva.model.DivisionDatabase.Companion.getDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Database(entities = [Division::class], version = 1, exportSchema = false)
 abstract class DivisionDatabase: RoomDatabase() {
@@ -31,4 +36,14 @@ abstract class DivisionDatabase: RoomDatabase() {
         }
     }
 
+}
+
+suspend fun prepopulateDatabase(db: DivisionDatabase) {
+    val initialData = listOf(
+        Division(1, "Kitchen", false),
+        Division(2, "Living room", false),
+        Division(3, "Master bedroom", false),
+        Division(4, "Guest’s bedroom", false)
+    )
+    db.divisionDao().addAllDivisions(initialData)
 }
