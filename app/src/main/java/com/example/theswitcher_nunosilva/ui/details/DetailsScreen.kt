@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -47,7 +49,7 @@ fun DetailsScreen(navController: NavHostController, division: Division) {
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.primary)
-                .padding(it)
+                .padding(top = it.calculateTopPadding(), bottom = it.calculateBottomPadding())
         ) {
             DetailsScreenContent(division)
         }
@@ -115,8 +117,11 @@ private fun DetailsScreenContent(division: Division) {
     val imageSize = detailsImageSize()
     val stateSize = detailsStateSize()
     val isOn = division.switch
+    val verticalScroll = rememberScrollState()
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(state = verticalScroll),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -128,7 +133,11 @@ private fun DetailsScreenContent(division: Division) {
             contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = if (isOn) painterResource(id = R.drawable.switch_on) else painterResource(id = R.drawable.switch_off),
+                painter =
+                if (isOn)
+                    painterResource(id = R.drawable.switch_on)
+                else
+                    painterResource(id = R.drawable.switch_off),
                 contentDescription = "Switch",
                 modifier = Modifier
                     .size(imageSize)

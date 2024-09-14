@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.navOptions
 import com.example.theswitcher_nunosilva.R
 import com.example.theswitcher_nunosilva.core.ErrorScreen
 import com.example.theswitcher_nunosilva.core.Green
@@ -60,7 +61,7 @@ fun HomeScreen(navController: NavHostController) {
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.primary)
-                .padding(it)
+                .padding(top = it.calculateTopPadding(), bottom = it.calculateBottomPadding())
         ) {
             GetDivisions(navController)
         }
@@ -143,7 +144,12 @@ private fun HomeScreenContent(navController: NavHostController) {
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) {
-                        navController.navigate(Destination.Details(divisionsData[index]))
+                        navController.navigate(
+                            Destination.Details(divisionsData[index]),
+                            navOptions = navOptions {
+                                launchSingleTop = true
+                            }
+                        )
                     },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
