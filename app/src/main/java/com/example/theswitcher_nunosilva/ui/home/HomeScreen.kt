@@ -3,6 +3,7 @@ package com.example.theswitcher_nunosilva.ui.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -138,7 +139,10 @@ private fun HomeScreenContent(navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
-                    .clickable {
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
                         navController.navigate(Destination.Details(divisionsData[index]))
                     },
                 horizontalArrangement = Arrangement.SpaceBetween,

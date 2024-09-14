@@ -1,5 +1,8 @@
 package com.example.theswitcher_nunosilva.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -27,7 +30,19 @@ fun NavGraph(
         composable<Destination.Details>(
             typeMap = mapOf(
                 typeOf<Division>() to DivisionType
-            )
+            ),
+            enterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { it },
+                    animationSpec = tween(500)
+                )
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { it },
+                    animationSpec = tween(500)
+                )
+            }
         ) {
             val arguments = it.toRoute<Destination.Details>()
             DetailsScreen(navController, arguments.division)
