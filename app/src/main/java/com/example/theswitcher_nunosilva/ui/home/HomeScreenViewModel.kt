@@ -54,7 +54,9 @@ class HomeScreenViewModel(
                         isSuccess.value = false
                     }
                     is DivisionsState.Success -> {
-                        divisionsData.clear()
+                        if (divisionsData.isNotEmpty()) {
+                            divisionsData.clear()
+                        }
                         divisionsData.addAll(it.divisions)
                         isError.value = false
                         messageError.value = ""
@@ -72,6 +74,18 @@ class HomeScreenViewModel(
                 division.switch = mode
                 divisionRepository.updateDivisionMode(division)
                 divisionsData[divisionsData.indexOf(division)] = division
+            } catch (e: Exception) {
+                _divisions.value = DivisionsState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+
+    fun addDivision(name: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val division = Division(0, name, false)
+                divisionRepository.addDivision(division)
+                getDivisions()
             } catch (e: Exception) {
                 _divisions.value = DivisionsState.Error(e.message ?: "Unknown error")
             }

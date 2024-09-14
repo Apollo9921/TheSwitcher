@@ -5,4 +5,10 @@
     <string name="division_state">Your %s light is</string>
     <string name="switch_on">ON</string>
     <string name="switch_off">OFF</string>
+    <string name="add_division">Add Division</string>
+    <string name="add_division_name">Division Name</string>
+    <string name="save_division_button">Save</string>
+    <string name="cancel_division_button">Cancel</string>
+    <string name="division_already_exists">Division already exists</string>
+    <string name="division_name_empty">Division name cannot be empty</string>
 </resources>

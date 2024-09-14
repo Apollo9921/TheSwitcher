@@ -46,6 +46,7 @@ import com.example.theswitcher_nunosilva.core.small
 import com.example.theswitcher_nunosilva.main.keepSplashOpened
 import com.example.theswitcher_nunosilva.model.Division
 import com.example.theswitcher_nunosilva.navigation.Destination
+import com.example.theswitcher_nunosilva.ui.home.addDivision.AddDivisionPopup
 import org.koin.androidx.compose.koinViewModel
 
 private var divisionsData = mutableStateListOf<Division>()
@@ -71,6 +72,18 @@ fun HomeScreen(navController: NavHostController) {
 
 @Composable
 private fun HomeTopBar() {
+    val isAddVisible = remember { mutableStateOf(false) }
+    if (isAddVisible.value) {
+        AddDivisionPopup(
+            divisionsData = divisionsData,
+            onDismissRequest = { isAddVisible.value = false },
+            onSave = {
+                divisionsData.clear()
+                viewModel?.addDivision(it)
+                isAddVisible.value = false
+            }
+        )
+    }
     val imageSize =
         if (mediaQueryWidth() <= small) {
             25.dp
@@ -104,6 +117,10 @@ private fun HomeTopBar() {
                 contentDescription = "Add",
                 modifier = Modifier
                     .size(imageSize)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) { isAddVisible.value = true }
             )
         }
     }
