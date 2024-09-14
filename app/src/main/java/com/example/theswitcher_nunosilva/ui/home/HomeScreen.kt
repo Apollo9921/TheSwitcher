@@ -47,6 +47,7 @@ import com.example.theswitcher_nunosilva.main.keepSplashOpened
 import com.example.theswitcher_nunosilva.model.Division
 import com.example.theswitcher_nunosilva.navigation.Destination
 import com.example.theswitcher_nunosilva.ui.home.addDivision.AddDivisionPopup
+import com.example.theswitcher_nunosilva.ui.home.deleteDivision.SwipeToDeleteContainer
 import org.koin.androidx.compose.koinViewModel
 
 private var divisionsData = mutableStateListOf<Division>()
@@ -151,50 +152,60 @@ private fun HomeScreenContent(navController: NavHostController) {
         state = state,
         modifier = Modifier.fillMaxSize()
     ) {
-        items(divisionsData.size) { index ->
+        items(
+            count = divisionsData.size,
+            key = { divisionsData[it].id }
+        ) { index ->
             var isOn by remember { mutableStateOf(divisionsData[index].switch) }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp)
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        navController.navigate(
-                            Destination.Details(divisionsData[index]),
-                            navOptions = navOptions {
-                                launchSingleTop = true
-                            }
-                        )
-                    },
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            SwipeToDeleteContainer(
+                item = divisionsData[index],
+                onDelete = {
+                    viewModel?.deleteDivision(divisionsData[index])
+                }
             ) {
-                Text(
-                    text = divisionsData[index].name,
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontWeight = FontWeight.W400,
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                )
-                Switch(
-                    checked = isOn,
-                    onCheckedChange = {
-                        viewModel?.updateDivisionMode(divisionsData[index].id, it)
-                        isOn = it
-                    },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = MaterialTheme.colorScheme.secondary,
-                        checkedTrackColor = MaterialTheme.colorScheme.tertiary,
-                        uncheckedThumbColor = MaterialTheme.colorScheme.primary,
-                        uncheckedTrackColor = MaterialTheme.colorScheme.tertiary
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp)
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            navController.navigate(
+                                Destination.Details(divisionsData[index]),
+                                navOptions = navOptions {
+                                    launchSingleTop = true
+                                }
+                            )
+                        },
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = divisionsData[index].name,
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontWeight = FontWeight.W400,
+                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
                     )
+                    Switch(
+                        checked = isOn,
+                        onCheckedChange = {
+                            viewModel?.updateDivisionMode(divisionsData[index].id, it)
+                            isOn = it
+                        },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = MaterialTheme.colorScheme.secondary,
+                            checkedTrackColor = MaterialTheme.colorScheme.tertiary,
+                            uncheckedThumbColor = MaterialTheme.colorScheme.primary,
+                            uncheckedTrackColor = MaterialTheme.colorScheme.tertiary
+                        )
+                    )
+                }
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.tertiary,
+                    thickness = 1.dp
                 )
             }
-            HorizontalDivider(
-                color = MaterialTheme.colorScheme.tertiary,
-                thickness = 1.dp
-            )
         }
     }
 }

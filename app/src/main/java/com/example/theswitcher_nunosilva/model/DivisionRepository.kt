@@ -6,8 +6,8 @@ class DivisionRepository(private val divisionDAO: DivisionsDAO) {
         divisionDAO.addDivision(division)
     }
 
-    suspend fun deleteDivision(id: Int) {
-        divisionDAO.deleteDivision(id)
+    suspend fun deleteDivision(division: Division) {
+        divisionDAO.deleteDivision(division)
     }
 
     fun readAllData(): List<Division> {

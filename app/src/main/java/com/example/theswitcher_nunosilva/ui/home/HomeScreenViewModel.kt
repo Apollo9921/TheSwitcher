@@ -91,4 +91,15 @@ class HomeScreenViewModel(
             }
         }
     }
+
+    fun deleteDivision(division: Division) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                divisionRepository.deleteDivision(division)
+                getDivisions()
+            } catch (e: Exception) {
+                _divisions.value = DivisionsState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
 }
