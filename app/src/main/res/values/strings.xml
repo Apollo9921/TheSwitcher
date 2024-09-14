@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">TheSwitcher_NunoSilva</string>
-    <string name="emptyDivisions">No divisions found</string>
+    <string name="empty_divisions">No divisions found</string>
     <string name="back">Back</string>
+    <string name="division_state">Your %s light is</string>
+    <string name="switch_on">ON</string>
+    <string name="switch_off">OFF</string>
 </resources>

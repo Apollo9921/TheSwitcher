@@ -13,7 +13,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.theswitcher_nunosilva.R
 
 val small = 600.dp
@@ -31,7 +33,7 @@ fun ShowEmptyScreen() {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = stringResource(id = R.string.emptyDivisions),
+            text = stringResource(id = R.string.empty_divisions),
             color = MaterialTheme.colorScheme.secondary,
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
             fontWeight = FontWeight.Bold,
@@ -53,5 +55,38 @@ fun ErrorScreen(error: String) {
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
+    }
+}
+
+@Composable
+fun detailsBackgroundSize(): Dp {
+    return if (mediaQueryWidth() <= small) {
+        200.dp
+    } else if (mediaQueryWidth() <= normal) {
+        300.dp
+    } else {
+        400.dp
+    }
+}
+
+@Composable
+fun detailsImageSize(): Dp {
+    return if (mediaQueryWidth() <= small) {
+        200.dp
+    } else if (mediaQueryWidth() <= normal) {
+        300.dp
+    } else {
+        400.dp
+    }
+}
+
+@Composable
+fun detailsStateSize(): TextUnit {
+    return if (mediaQueryWidth() <= small) {
+        50.sp
+    } else if (mediaQueryWidth() <= normal) {
+        100.sp
+    } else {
+        150.sp
     }
 }

@@ -1,14 +1,17 @@
 package com.example.theswitcher_nunosilva.ui.details
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
@@ -27,18 +30,27 @@ import androidx.navigation.NavHostController
 import com.example.theswitcher_nunosilva.R
 import com.example.theswitcher_nunosilva.core.Green
 import com.example.theswitcher_nunosilva.core.White
+import com.example.theswitcher_nunosilva.core.detailsBackgroundSize
+import com.example.theswitcher_nunosilva.core.detailsImageSize
+import com.example.theswitcher_nunosilva.core.detailsStateSize
 import com.example.theswitcher_nunosilva.core.mediaQueryWidth
 import com.example.theswitcher_nunosilva.core.normal
 import com.example.theswitcher_nunosilva.core.small
 import com.example.theswitcher_nunosilva.model.Division
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DetailsScreen(navController: NavHostController, division: Division) {
     Scaffold(
         topBar = { DetailsTopBar(navController, division) }
     ) {
-
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.primary)
+                .padding(it)
+        ) {
+            DetailsScreenContent(division)
+        }
     }
 }
 
@@ -94,5 +106,49 @@ private fun DetailsTopBar(navController: NavHostController, division: Division) 
                 modifier = Modifier.weight(2f)
             )
         }
+    }
+}
+
+@Composable
+private fun DetailsScreenContent(division: Division) {
+    val backgroundSize = detailsBackgroundSize()
+    val imageSize = detailsImageSize()
+    val stateSize = detailsStateSize()
+    val isOn = division.switch
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(backgroundSize)
+                .background(MaterialTheme.colorScheme.tertiary),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = if (isOn) painterResource(id = R.drawable.switch_on) else painterResource(id = R.drawable.switch_off),
+                contentDescription = "Switch",
+                modifier = Modifier
+                    .size(imageSize)
+            )
+        }
+        Spacer(modifier = Modifier.padding(10.dp))
+        Text(
+            text = stringResource(id = R.string.division_state, division.name),
+            color = MaterialTheme.colorScheme.secondary,
+            fontWeight = FontWeight.W400,
+            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.padding(10.dp))
+        Text(
+            text = if (isOn) stringResource(id = R.string.switch_on) else stringResource(id = R.string.switch_off),
+            color = MaterialTheme.colorScheme.secondary,
+            fontWeight = FontWeight.Bold,
+            fontSize = stateSize,
+            textAlign = TextAlign.Center,
+        )
     }
 }
