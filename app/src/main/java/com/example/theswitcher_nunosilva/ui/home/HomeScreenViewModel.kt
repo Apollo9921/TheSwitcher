@@ -1,4 +1,4 @@
-package com.example.theswitcher_nunosilva.ui
+package com.example.theswitcher_nunosilva.ui.home
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf

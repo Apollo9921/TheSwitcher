@@ -1,7 +1,8 @@
-package com.example.theswitcher_nunosilva.ui
+package com.example.theswitcher_nunosilva.ui.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -42,6 +43,7 @@ import com.example.theswitcher_nunosilva.core.normal
 import com.example.theswitcher_nunosilva.core.small
 import com.example.theswitcher_nunosilva.main.keepSplashOpened
 import com.example.theswitcher_nunosilva.model.Division
+import com.example.theswitcher_nunosilva.navigation.Destination
 import org.koin.androidx.compose.koinViewModel
 
 private var divisionsData = mutableStateListOf<Division>()
@@ -135,7 +137,10 @@ private fun HomeScreenContent(navController: NavHostController) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(20.dp),
+                    .padding(20.dp)
+                    .clickable {
+                        navController.navigate(Destination.Details(divisionsData[index]))
+                    },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {

@@ -2,7 +2,7 @@ package com.example.theswitcher_nunosilva.koin
 
 import com.example.theswitcher_nunosilva.model.DivisionDatabase
 import com.example.theswitcher_nunosilva.model.DivisionRepository
-import com.example.theswitcher_nunosilva.ui.HomeScreenViewModel
+import com.example.theswitcher_nunosilva.ui.home.HomeScreenViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module

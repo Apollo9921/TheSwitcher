@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">TheSwitcher_NunoSilva</string>
     <string name="emptyDivisions">No divisions found</string>
+    <string name="back">Back</string>
 </resources>

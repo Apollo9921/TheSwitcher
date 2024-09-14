@@ -4,7 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.theswitcher_nunosilva.ui.HomeScreen
+import androidx.navigation.toRoute
+import com.example.theswitcher_nunosilva.model.Division
+import com.example.theswitcher_nunosilva.navigation.CustomNavType.DivisionType
+import com.example.theswitcher_nunosilva.ui.details.DetailsScreen
+import com.example.theswitcher_nunosilva.ui.home.HomeScreen
+import kotlin.reflect.typeOf
 
 @Composable
 fun NavGraph(
@@ -17,6 +22,15 @@ fun NavGraph(
     ) {
         composable<Destination.Home> {
             HomeScreen(navController)
+        }
+
+        composable<Destination.Details>(
+            typeMap = mapOf(
+                typeOf<Division>() to DivisionType
+            )
+        ) {
+            val arguments = it.toRoute<Destination.Details>()
+            DetailsScreen(navController, arguments.division)
         }
     }
 }
