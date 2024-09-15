@@ -93,17 +93,23 @@ fun DeleteBackground(
         Color.Transparent
     }
 
+    val iconColor = if (swipeDismissState.dismissDirection == SwipeToDismissBoxValue.StartToEnd) {
+        White
+    } else {
+        Color.Transparent
+    }
+
     Box(
         modifier = Modifier
             .wrapContentSize()
             .background(color)
             .padding(20.dp),
-        contentAlignment = Alignment.CenterStart
+        contentAlignment = Alignment.Center
     ) {
         Icon(
             imageVector = Icons.Default.Delete,
             contentDescription = null,
-            tint = White
+            tint = iconColor
         )
     }
 }
