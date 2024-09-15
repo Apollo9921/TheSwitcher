@@ -73,8 +73,8 @@ fun HomeScreen(navController: NavHostController) {
         ) {
             GetDivisions(navController)
         }
-        keepSplashOpened = false
     }
+    keepSplashOpened = false
 }
 
 @Composable
