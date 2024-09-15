@@ -1,7 +1,8 @@
 package com.example.theswitcher_nunosilva.ui.home
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.theswitcher_nunosilva.model.Division
@@ -13,19 +14,19 @@ import kotlinx.coroutines.launch
 
 class HomeScreenViewModel(
     private val divisionRepository: DivisionRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _divisions = MutableStateFlow<DivisionsState>(DivisionsState.Success(emptyList()))
     private val divisions: StateFlow<DivisionsState> = _divisions
 
-    var divisionsData = mutableStateListOf<Division>()
+    var divisionsData = SnapshotStateList<Division>()
     var messageError = mutableStateOf("")
     var isSuccess = mutableStateOf(false)
     var isError = mutableStateOf(false)
 
     sealed class DivisionsState {
-        data class Success(val divisions: List<Division>): DivisionsState()
-        data class Error(val error: String): DivisionsState()
+        data class Success(val divisions: List<Division>) : DivisionsState()
+        data class Error(val error: String) : DivisionsState()
     }
 
     init {
@@ -47,17 +48,15 @@ class HomeScreenViewModel(
     private fun getDivisionsResponse() {
         viewModelScope.launch(Dispatchers.IO) {
             divisions.collect {
-                when(it) {
+                when (it) {
                     is DivisionsState.Error -> {
                         messageError.value = it.error
                         isError.value = true
                         isSuccess.value = false
                     }
+
                     is DivisionsState.Success -> {
-                        if (divisionsData.isNotEmpty()) {
-                            divisionsData.clear()
-                        }
-                        divisionsData.addAll(it.divisions)
+                        divisionsData = it.divisions.toMutableStateList()
                         isError.value = false
                         messageError.value = ""
                         isSuccess.value = true
@@ -96,7 +95,6 @@ class HomeScreenViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 divisionRepository.deleteDivision(division)
-                getDivisions()
             } catch (e: Exception) {
                 _divisions.value = DivisionsState.Error(e.message ?: "Unknown error")
             }

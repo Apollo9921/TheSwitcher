@@ -11,4 +11,6 @@
     <string name="cancel_division_button">Cancel</string>
     <string name="division_already_exists">Division already exists</string>
     <string name="division_name_empty">Division name cannot be empty</string>
+    <string name="order_by_id">Older</string>
+    <string name="order_by_name">Alphabetically</string>
 </resources>

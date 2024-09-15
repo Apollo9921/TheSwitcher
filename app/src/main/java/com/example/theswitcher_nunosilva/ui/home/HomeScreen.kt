@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +22,7 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -48,10 +51,13 @@ import com.example.theswitcher_nunosilva.model.Division
 import com.example.theswitcher_nunosilva.navigation.Destination
 import com.example.theswitcher_nunosilva.ui.home.addDivision.AddDivisionPopup
 import com.example.theswitcher_nunosilva.ui.home.deleteDivision.SwipeToDeleteContainer
+import com.example.theswitcher_nunosilva.ui.home.order.ShowDropDownMenu
 import org.koin.androidx.compose.koinViewModel
 
 private var divisionsData = mutableStateListOf<Division>()
 private var viewModel: HomeScreenViewModel? = null
+private var showContent = mutableStateOf(false)
+private var selectedOrderIndex = mutableIntStateOf(0)
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
@@ -73,6 +79,11 @@ fun HomeScreen(navController: NavHostController) {
 
 @Composable
 private fun HomeTopBar() {
+    var expanded by remember { mutableStateOf(false) }
+    val items = listOf(
+        stringResource(id = R.string.order_by_id),
+        stringResource(id = R.string.order_by_name)
+    )
     val isAddVisible = remember { mutableStateOf(false) }
     if (isAddVisible.value) {
         AddDivisionPopup(
@@ -113,6 +124,37 @@ private fun HomeTopBar() {
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Column {
+                Image(
+                    painter = painterResource(id = R.drawable.order),
+                    contentDescription = "Add",
+                    modifier = Modifier
+                        .size(imageSize)
+                        .rotate(90f)
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) { expanded = !expanded }
+                )
+                ShowDropDownMenu(
+                    expanded = expanded,
+                    items = items,
+                    onClickOption = { it ->
+                        when (it) {
+                            0 -> {
+                                divisionsData.sortBy { it.id }
+                            }
+
+                            1 -> {
+                                divisionsData.sortBy { it.name.lowercase() }
+                            }
+                        }
+                        selectedOrderIndex.intValue = it
+                        expanded = false
+                    },
+                    onDismissRequest = { expanded = false }
+                )
+            }
             Image(
                 painter = painterResource(id = R.drawable.add),
                 contentDescription = "Add",
@@ -135,18 +177,34 @@ private fun GetDivisions(navController: NavHostController) {
             if (divisionsData.isEmpty()) {
                 ShowEmptyScreen()
             } else {
-                HomeScreenContent(navController)
+                showContent.value = true
+                viewModel?.isSuccess?.value = false
             }
         }
 
         viewModel?.isError?.value == true -> {
             ErrorScreen(viewModel?.messageError?.value ?: "")
         }
+
+        showContent.value -> {
+            if (selectedOrderIndex.intValue == 0) {
+                divisionsData.sortBy { it.id }
+            } else {
+                divisionsData.sortBy { it.name.lowercase() }
+            }
+            HomeScreenContent(navController)
+        }
     }
 }
 
 @Composable
 private fun HomeScreenContent(navController: NavHostController) {
+    var isItemDeleted by remember { mutableStateOf(false) }
+    val deletedIndex = remember { mutableIntStateOf(0) }
+    if (isItemDeleted) {
+        isItemDeleted = false
+        divisionsData.removeAt(deletedIndex.intValue)
+    }
     val state = rememberLazyListState()
     LazyColumn(
         state = state,
@@ -161,6 +219,8 @@ private fun HomeScreenContent(navController: NavHostController) {
                 item = divisionsData[index],
                 onDelete = {
                     viewModel?.deleteDivision(divisionsData[index])
+                    deletedIndex.intValue = index
+                    isItemDeleted = true
                 }
             ) {
                 Row(
